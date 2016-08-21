@@ -1,7 +1,5 @@
 import csv
-count=[0]
-for i in range(0, 1000):
-	count.append(0) 
+count=[0]*1000 
 print (count)
 with open('T10I4D100K.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile)
