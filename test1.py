@@ -12,4 +12,3 @@ with open('T10I4D100K.csv', newline='') as csvfile:
 for i in range(0, LENGTH):
 	support[i]=count[i]/LENGTH
 min_support=min(support)
-print(min_support)
