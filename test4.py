@@ -9,23 +9,22 @@ item=[]
 item2=[]
 min_support=3
 def transactions():
-	count=[]
-	with open('T10I4D100K.csv', 'rb') as csvfile:
-    	 spamreader = csv.reader(csvfile)
-    	 for row in spamreader:
-    		for i in row:
-    			i=int(i)
-    			if i not in item:
-    				item.append(i)
-    				support[i]=1
-    			else:
-    				support[i] += 1
-    			count.append(i)
-    		transaction.append(count)
-    		count =[]
-    		item.sort()
-
-
+        count=[]
+        with open('T10I4D100K.csv', newline='') as csvfile:
+                spamreader=csv.reader(csvfile)
+                for row in spamreader:
+                        for i in row:
+                                i=int(i)
+                                if i not in item:
+                                        item.append(i)
+                                        support[i]=1
+                                else:
+                                        support[i]+=1
+                                count.append(i)
+                        transaction.append(count)
+                        count=[]
+                        item.sort()
+        
 def first_frequent():
 	for i in item:
 		if support[i]>3:
@@ -57,8 +56,8 @@ def sec_freq():
 		k=item2[b][0]
 		l=item2[b][1]
 		if support2[k,l]>3:
-			print item2[b]
-			print support2[k,l]
+			print(item2[b])
+			print(support2[k,l])
 		else:
 			del support2[k,l]	
 def tre_frec():
@@ -98,8 +97,8 @@ def tre_frec():
 		l=item3[b][1]
 		n=item3[b][2]
 		if support3[k,l,n]>3:
-			print item3[b]
-			print support3[k,l,n]
+			print(item3[b])
+			print(support3[k,l,n])
 		else:
 			del support3[k,l,n]	
 
