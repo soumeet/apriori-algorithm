@@ -4,7 +4,6 @@ support=[0.0]*1000
 LENGTH=0
 with open('T10I4D100K.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile)
-    mx=0
     for row in spamreader:
     	for i in row:
     		count[int(i)]=count[int(i)]+1
