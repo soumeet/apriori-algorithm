@@ -3,30 +3,40 @@ import csv
 
 dataset=sys.argv[1]
 min_support=float(sys.argv[2])
-transaction=[]
-no_of_transaction=0
-itemset1_support={}
-itemset1_count={}
-item_count=[0]*1000
+transactions=[]
+no_of_transactions=0
+itemset=[]
+itemset_support={}
+itemset_count={}
 frequent_1itemset=[]
-def read_transaction():
+def read_transactions():
 	with open(dataset, newline='') as csvfile:
-		itemset = csv.reader(csvfile)
-		for row in itemset:
-			for i in row:
-				item_count[int(i)]+=1
-			transaction.append(row)
+            spamreader = csv.reader(csvfile)
+            for row in spamreader:
+                transaction_row=[]
+                for i in row:
+                    item=int(i)
+                    if item not in itemset:
+                        itemset.append(item)
+                        itemset_count[item]=1
+                    else:
+                        itemset_count[item]+=1
+                    transaction_row.append(item)
+                transactions.append(transaction_row)
 
 def generate_support():
-	for i in range(0, no_of_transaction):
-		item_support.append(item_count[i]/no_of_transaction)
+	for item in itemset:
+		itemset_support[item]=float(itemset_count[item]/no_of_transaction)
 
 def generate_1itemset():
-	for i in range(0, no_of_transaction):
-		if not item_support[i] == 0.0:
-			if item_support[i] >= min_support:
-				print(i, ":", item_count[i], ":", item_support[i])
+	for item in itemset:
+		if itemset_support[item] >= min_support:
+			frequent_1itemset.append(item)
 
-read_transaction()
-no_of_transaction=len(transaction)
-
+read_transactions()
+no_of_transaction=len(transactions)
+print(no_of_transaction)
+itemset.sort()
+generate_support()
+generate_1itemset()
+print(frequent_1itemset)
