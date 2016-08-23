@@ -9,6 +9,7 @@ itemset=[]
 itemset_support={}
 itemset_count={}
 frequent_1itemset=[]
+frequent_2itemset=[]
 def read_transactions():
 	with open(dataset, newline='') as csvfile:
             spamreader = csv.reader(csvfile)
@@ -33,10 +34,18 @@ def generate_1itemset():
 		if itemset_support[item] >= min_support:
 			frequent_1itemset.append(item)
 
+def generate_2itemset():
+	for item1 in frequent_1itemset:
+		for item2 in frequent_1itemset:
+			if not item1 == item2:
+				if [item2, item1] not in frequent_2itemset:
+					frequent_2itemset.append([item1, item2])
+
 read_transactions()
 no_of_transaction=len(transactions)
-print(no_of_transaction)
 itemset.sort()
 generate_support()
 generate_1itemset()
+generate_2itemset()
 print(frequent_1itemset)
+print(frequent_2itemset)
