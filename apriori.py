@@ -1,27 +1,32 @@
 import sys
 import csv
 
-DATASET=sys.argv[1]
-no_of_transaction=0
+dataset=sys.argv[1]
 min_support=float(sys.argv[2])
-item_support=[]
+transaction=[]
+no_of_transaction=0
+itemset1_support={}
+itemset1_count={}
 item_count=[0]*1000
-frequent_item1_count=0
-with open(DATASET, newline='') as csvfile:
-    itemset = csv.reader(csvfile)
-    for row in itemset:
-    	for i in row:
-    		item_count[int(i)]+=1
-    	no_of_transaction+=1
-for i in range(0, no_of_transaction):
-	item_support.append(item_count[i]/no_of_transaction)
-#print(item_count)
-#print(item_support)
+frequent_1itemset=[]
+def read_transaction():
+	with open(dataset, newline='') as csvfile:
+		itemset = csv.reader(csvfile)
+		for row in itemset:
+			for i in row:
+				item_count[int(i)]+=1
+			transaction.append(row)
 
-print("item:count:support")
-for i in range(0, no_of_transaction):
-	if not item_support[i] == 0.0:
-		if item_support[i] >= min_support:
-			print(i, ":", item_count[i], ":", item_support[i])
-			frequent_item1_count+=1
-print("frequent 1-itemset: ",frequent_item1_count)
+def generate_support():
+	for i in range(0, no_of_transaction):
+		item_support.append(item_count[i]/no_of_transaction)
+
+def generate_1itemset():
+	for i in range(0, no_of_transaction):
+		if not item_support[i] == 0.0:
+			if item_support[i] >= min_support:
+				print(i, ":", item_count[i], ":", item_support[i])
+
+read_transaction()
+no_of_transaction=len(transaction)
+
