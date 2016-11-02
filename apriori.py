@@ -15,6 +15,8 @@ itemset2_count={}
 frequent_2itemset=[]
 itemset3=[]
 itemset3_count={}
+itemset3_support={}
+frequent_3itemset=[]
 def read_transactions():
 	with open(dataset, newline='') as csvfile:
             spamreader = csv.reader(csvfile)
@@ -51,19 +53,47 @@ def generate_2itemset():
 	for items in itemset2:
 		itemset2_support[items[0],items[1]]=float(itemset2_count[items[0],items[1]]/no_of_transaction)
 	for items in itemset2:
-		if itemset2_support[items[0],items[1]] >= min_support:
+		if itemset2_support[items[0],items[1]] >= 0.001:
 			frequent_2itemset.append(items)
 
 def generate_3itemset():
-	for item1 in frequent_1itemset:
+	'''for item1 in frequent_1itemset:
 		for item2 in frequent_1itemset:
 			for item3 in frequent_1itemset:
-				if [item1, item2] in frequent_2itemset and [item2, item3] in frequent_2itemset and [item3, item2] in frequent_2itemset:
-					itemset3.append([item1, item2, item3])
-					itemset3_support[item1, item2, item3]=0
+                                print("checking: ",item1," ",item2," ",item3,[item1, item2] in frequent_2itemset and [item2, item3] in frequent_2itemset and [item3, item1] in frequent_2itemset)
+                                if [item1, item2] in frequent_2itemset and [item2, item3] in frequent_2itemset and [item3, item1] in frequent_2itemset:
+                                        itemset3.append([item1, item2, item3])
+                                        itemset3_count[item1, item2, item3]=0'''
+	for item in frequent_1itemset:
+		for items in frequent_2itemset:
+			items3=[]
+			if item not in items:
+                                items3=[item, items[0],items[1]]
+                                items3.sort()
+                                itemset3.append(items3)
+                                itemset3_count[items3[0],items3[1],items3[2]]=0
+	for items in itemset3:
+		for row in transactions:
+			if set(items).issubset(row):
+				itemset3_count[items[0],items[1],items[2]]+=1
+	for items in itemset3:
+		itemset3_support[items[0],items[1],items[2]]=float(itemset3_count[items[0],items[1],items[2]]/no_of_transaction)
+	for items in itemset3:
+		if itemset3_support[items[0],items[1],items[2]] >= 0.001:
+			#print([items[0],items[1],items[2]],itemset3_support[items[0],items[1],items[2]])
+			frequent_3itemset.append(items)
+                                
 
 read_transactions()
 no_of_transaction=len(transactions)
+print(no_of_transaction)
 itemset.sort()
 generate_1itemset()
+print("Frequent 1-itemset")
+print(frequent_1itemset)
 generate_2itemset()
+print("Frequent 2-itemset")
+print(frequent_2itemset)
+generate_3itemset()
+print("Frequent 3-itemset")
+print(frequent_3itemset)
