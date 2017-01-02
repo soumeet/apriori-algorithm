@@ -3,6 +3,7 @@ import csv
 
 dataset=sys.argv[1]
 min_support=float(sys.argv[2])
+min_confidence=float(sys.argv[3])
 transactions=[]
 no_of_transactions=0
 itemset=[]
@@ -17,7 +18,9 @@ frequent_2itemset=[]
 itemset3=[]
 itemset3_count={}
 itemset3_support={}
+itemset3_confidence={}
 frequent_3itemset=[]
+rules=[]
 def read_transactions():
 	with open(dataset, newline='') as csvfile:
             spamreader = csv.reader(csvfile)
@@ -53,10 +56,13 @@ def generate_2itemset():
 					itemset2_count[items[0],items[1]]+=1
 	for items in itemset2:
 		itemset2_support[items[0],items[1]]=float(itemset2_count[items[0],items[1]]/no_of_transaction)
-		itemset2_confidence[items[0],items[1]]=float(itemset2_support[items[0],items[1]]/itemset_count[items[0]])
+		itemset2_confidence[items[0],items[1]]=float(itemset2_count[items[0],items[1]]/itemset_count[items[0]])
 	for items in itemset2:
 		if itemset2_support[items[0],items[1]] >= min_support:
 			frequent_2itemset.append(items)
+		if itemset2_confidence[items[0],items[1]] >= min_confidence:
+                        tmp=items[0]+"->"+items[1]
+                        rules.append(tmp)
 
 def generate_3itemset():
 	'''for item1 in frequent_1itemset:
@@ -80,10 +86,14 @@ def generate_3itemset():
 				itemset3_count[items[0],items[1],items[2]]+=1
 	for items in itemset3:
 		itemset3_support[items[0],items[1],items[2]]=float(itemset3_count[items[0],items[1],items[2]]/no_of_transaction)
+		itemset3_confidence[items[0],items[1],items[3]]=float(itemset3_count[items[0],items[1],items[2]]/itemset2_count[items[0],items[1]])
 	for items in itemset3:
 		if itemset3_support[items[0],items[1],items[2]] >= min_support:
 			#print([items[0],items[1],items[2]],itemset3_support[items[0],items[1],items[2]])
 			frequent_3itemset.append(items)
+		if itemset3_confidence[items[0],items[1],items[2]] >= min_confidence:
+                        tmp=items[0]+","+items[1]+"->"+items[2]
+                        rules.append(tmp)
                                 
 
 read_transactions()
@@ -103,3 +113,6 @@ generate_3itemset()
 print("Frequent 3-itemset")
 print(frequent_3itemset)
 '''
+
+print("rules generated: ", len(rules))
+print("execution time: ", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)))
