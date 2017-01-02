@@ -12,6 +12,7 @@ frequent_1itemset=[]
 itemset2=[]
 itemset2_support={}
 itemset2_count={}
+itemset2_confidence={}
 frequent_2itemset=[]
 itemset3=[]
 itemset3_count={}
@@ -52,8 +53,9 @@ def generate_2itemset():
 					itemset2_count[items[0],items[1]]+=1
 	for items in itemset2:
 		itemset2_support[items[0],items[1]]=float(itemset2_count[items[0],items[1]]/no_of_transaction)
+		itemset2_confidence[items[0],items[1]]=float(itemset2_support[items[0],items[1]]/itemset_count[items[0]])
 	for items in itemset2:
-		if itemset2_support[items[0],items[1]] >= 0.001:
+		if itemset2_support[items[0],items[1]] >= min_support:
 			frequent_2itemset.append(items)
 
 def generate_3itemset():
@@ -79,7 +81,7 @@ def generate_3itemset():
 	for items in itemset3:
 		itemset3_support[items[0],items[1],items[2]]=float(itemset3_count[items[0],items[1],items[2]]/no_of_transaction)
 	for items in itemset3:
-		if itemset3_support[items[0],items[1],items[2]] >= 0.001:
+		if itemset3_support[items[0],items[1],items[2]] >= min_support:
 			#print([items[0],items[1],items[2]],itemset3_support[items[0],items[1],items[2]])
 			frequent_3itemset.append(items)
                                 
@@ -94,6 +96,10 @@ print(frequent_1itemset)
 generate_2itemset()
 print("Frequent 2-itemset")
 print(frequent_2itemset)
+for item2_conf in itemset2_confidence:
+        print(item2_conf)
+'''
 generate_3itemset()
 print("Frequent 3-itemset")
 print(frequent_3itemset)
+'''
