@@ -56,8 +56,8 @@ def generate_2itemset():
 			if set(items).issubset(row):
 					itemset2_count[items[0],items[1]]+=1
 	for items in itemset2:
-		itemset2_support[items[0],items[1]]=float(itemset2_count[items[0],items[1]]/no_of_transaction)
-		itemset2_confidence[items[0],items[1]]=float(itemset2_count[items[0],items[1]]/itemset_count[items[0]])
+                itemset2_support[items[0],items[1]]=float(itemset2_count[items[0],items[1]]/no_of_transaction)
+                itemset2_confidence[items[0],items[1]]=float(itemset2_count[items[0],items[1]]/itemset_count[items[0]])
 	for items in itemset2:
 		if itemset2_support[items[0],items[1]] >= min_support:
 			frequent_2itemset.append(items)
@@ -66,35 +66,47 @@ def generate_2itemset():
                         rules.append(tmp)
 
 def generate_3itemset():
-	'''for item1 in frequent_1itemset:
-		for item2 in frequent_1itemset:
-			for item3 in frequent_1itemset:
-                                print("checking: ",item1," ",item2," ",item3,[item1, item2] in frequent_2itemset and [item2, item3] in frequent_2itemset and [item3, item1] in frequent_2itemset)
-                                if [item1, item2] in frequent_2itemset and [item2, item3] in frequent_2itemset and [item3, item1] in frequent_2itemset:
-                                        itemset3.append([item1, item2, item3])
-                                        itemset3_count[item1, item2, item3]=0'''
-	for item in frequent_1itemset:
+	'''for item in frequent_1itemset:
 		for items in frequent_2itemset:
 			items3=[]
 			if item not in items:
                                 items3=[item, items[0],items[1]]
                                 items3.sort()
                                 itemset3.append(items3)
-                                itemset3_count[items3[0],items3[1],items3[2]]=0
+                                itemset3_count[items3[0],items3[1],items3[2]]=0'''
+	
+        for items1 in frequent_2itemset:
+                for items2 in frequent_2itemset:
+                        if items1[0]==items2[0]:
+                                if not items1[1]==items2[1]:
+                                        #print(items1," ",items2,":",items1[0],items1[1],items2[1])
+                                        items3=[items1[0],items1[1],items2[1]]
+                                        #items3.sort()
+                                        if items3 not in itemset3:
+                                                itemset3.append(items3)
+                                                itemset3_count[items1[0],items1[1],items2[1]]
 	for items in itemset3:
 		for row in transactions:
 			if set(items).issubset(row):
 				itemset3_count[items[0],items[1],items[2]]+=1
 	for items in itemset3:
 		itemset3_support[items[0],items[1],items[2]]=float(itemset3_count[items[0],items[1],items[2]]/no_of_transaction)
-		itemset3_confidence[items[0],items[1],items[3]]=float(itemset3_count[items[0],items[1],items[2]]/itemset2_count[items[0],items[1]])
+		try:
+			if not itemset2_count[items[0],items[1]]==0:
+				itemset3_confidence[items[0],items[1],items[2]]=float(itemset3_count[items[0],items[1],items[2]]/itemset2_count[items[0],items[1]])
+		except:
+			if not itemset2_count[items[1],items[0]]==0:
+				itemset3_confidence[items[0],items[1],items[2]]=float(itemset3_count[items[0],items[1],items[2]]/itemset2_count[items[1],items[0]])
 	for items in itemset3:
 		if itemset3_support[items[0],items[1],items[2]] >= min_support:
-			#print([items[0],items[1],items[2]],itemset3_support[items[0],items[1],items[2]])
+			print([items[0],items[1],items[2]],itemset3_support[items[0],items[1],items[2]])
 			frequent_3itemset.append(items)
-		if itemset3_confidence[items[0],items[1],items[2]] >= min_confidence:
+	for items in itemset3_confidence:
+		if itemset3_confidence[items] >= min_confidence:
                         tmp=items[0]+","+items[1]+"->"+items[2]
-                        rules.append(tmp)
+                        rules.append(tmp)'''
+	
+                                        
                                 
 
 start_time = time.time()
@@ -111,12 +123,15 @@ generate_2itemset()
 print("Frequent 2-itemset")
 print(frequent_2itemset)
 
-'''
 generate_3itemset()
 print("Frequent 3-itemset")
-print(frequent_3itemset)
+#print(frequent_3itemset)
+for i in itemset3:
+        print(i)
 '''
-
+for i in rules:
+        print(i)
+'''
 #print("execution time: %s sec" % (time.time() - start_time))
-print("rules generated: ", len(rules))
+#print("rules generated: ", len(rules))
 print("execution time: ", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)))

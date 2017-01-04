@@ -38,16 +38,16 @@ def sec_freq():
 		for j in range(i+1,len(frequent)-1):
 			item2.append([frequent[i],frequent[j]])
 			support2[frequent[i],frequent[j]]=0
-	for b in range(0,len(item2)):
-		for i in range(0,len(transaction)):
+	for i in range(0,len(item2)):
+		for j in range(0,len(transaction)):
 			
-			if item2[b][0] in transaction[i]:
+			if item2[i][0] in transaction[j]:
 				c+=1
-			if item2[b][1] in transaction[i]:
+			if item2[i][1] in transaction[j]:
 				c+=1
 			if c==2:
-				k=item2[b][0]
-				l=item2[b][1]
+				k=item2[i][0]
+				l=item2[j][1]
 				support2[k,l]+=1
 				
 			c=0
